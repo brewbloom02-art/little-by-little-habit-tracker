@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FAF7F2"/>
+      <stop offset="100%" stop-color="#EFE9DF"/>
+    </linearGradient>
+    <linearGradient id="leafGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#7AA88E"/>
+      <stop offset="100%" stop-color="#4D7760"/>
+    </linearGradient>
+    <linearGradient id="sunGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FCEFD2"/>
+      <stop offset="100%" stop-color="#F2D79A"/>
+    </linearGradient>
+  </defs>
+  <!-- Background circle with soft border -->
+  <rect width="512" height="512" rx="128" fill="url(#bgGrad)"/>
+  <circle cx="256" cy="256" r="220" fill="none" stroke="#DCD4C4" stroke-width="6" stroke-dasharray="12 12"/>
+  
+  <!-- Gentle Sun backdrop -->
+  <circle cx="340" cy="180" r="64" fill="url(#sunGrad)" opacity="0.6"/>
+
+  <!-- Soil mound -->
+  <path d="M140 370 Q256 330 372 370 Q382 385 360 395 Q256 410 152 395 Q130 385 140 370 Z" fill="#9C8974" opacity="0.85"/>
+  
+  <!-- Sprout Stem -->
+  <path d="M256 360 C256 300 248 240 220 180" fill="none" stroke="#3D634E" stroke-width="18" stroke-linecap="round"/>
+  
+  <!-- Right Leaf -->
+  <path d="M236 240 C280 230 330 190 340 130 C270 140 240 190 236 240 Z" fill="url(#leafGrad)"/>
+  
+  <!-- Left Leaf -->
+  <path d="M226 210 C180 200 130 220 110 260 C160 270 210 240 226 210 Z" fill="#5E8A71"/>
+  
+  <!-- Little Dew Drop -->
+  <circle cx="330" cy="140" r="10" fill="#E8F4F8" stroke="#8DC8E8" stroke-width="3"/>
+</svg>

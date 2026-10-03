@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Little by Little — Calm Daily Habit Tracker</title>
+  
+  <!-- Meta tags for PWA and Mobile -->
+  <meta name="description" content="Help people build routines through small, manageable habits. Calm, warm, and forgiving.">
+  <meta name="theme-color" content="#FAF7F2">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Little by Little">
+  
+  <!-- Favicons and Manifest -->
+  <link rel="icon" type="image/svg+xml" href="./assets/icons/icon.svg">
+  <link rel="apple-touch-icon" href="./assets/icons/icon-192.png">
+  <link rel="manifest" href="./manifest.json">
+  
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+
+  <!-- In-App Notification Toast -->
+  <div class="toast-notice" id="toastNotice" role="alert" aria-live="polite"></div>
+
+  <main class="app-container">
+    
+    <!-- Demo Content Notice Banner -->
+    <div class="demo-banner" id="demoBanner">
+      <span>🌱 <strong>Demo Habits</strong> loaded for preview.</span>
+      <div class="demo-banner-actions">
+        <button class="btn-banner" id="btnClearDemo">Clear</button>
+        <button class="btn-banner" id="btnKeepDemo">Keep</button>
+      </div>
+    </div>
+
+    <!-- In-App Reminder Due Banner (Appears gently at alarm time) -->
+    <div class="reminder-due-banner" id="reminderDueBanner" style="display: none;"></div>
+
+    <!-- App Header -->
+    <header class="app-header">
+      <div class="header-top">
+        <div class="brand-badge">
+          <svg class="sprout-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M7 20h10"></path>
+            <path d="M10 20c0-4.5 1-8 6-8"></path>
+            <path d="M16 12c-3.5 0-6-2.5-6-6 4 0 7 2 7 6"></path>
+            <path d="M10 16c-2.5 0-4-1.5-4-4 3 0 5 1.5 5 4"></path>
+          </svg>
+          <span>Little by Little</span>
+        </div>
+        <button class="btn-circle" id="btnOpenNewHabit" aria-label="Create new habit" title="Create new habit">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg>
+        </button>
+      </div>
+
+      <div class="header-headline">
+        <h1 id="todayDateDisplay">Today</h1>
+        <p>One small, manageable step at a time.</p>
+      </div>
+    </header>
+
+    <!-- TAB 1: TODAY VIEW -->
+    <section class="view-section active" id="view-today">
+      <!-- Daily Summary Card -->
+      <div class="today-summary-card" id="todaySummaryCard">
+        <div class="summary-row">
+          <span class="summary-title">Today's Rhythm</span>
+          <span class="summary-count" id="todaySummaryCount">0 of 0 done</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" id="todayProgressFill" style="width: 0%;"></div>
+        </div>
+        <div class="encouragement-msg" id="todayEncouragement">Take your time. Routine grows at its own pace.</div>
+      </div>
+
+      <!-- Today's Habits List -->
+      <div class="habits-list" id="todayHabitsList"></div>
+
+      <!-- Empty State when nothing scheduled today -->
+      <div class="empty-state" id="todayEmptyState" style="display: none;">
+        <div class="empty-icon">🌿</div>
+        <h2 class="empty-title">All clear today</h2>
+        <p class="empty-text">No habits scheduled for today. Rest is part of the process, too.</p>
+        <button class="btn-primary empty-btn" id="btnEmptyAdd">+ Create a new habit</button>
+      </div>
+    </section>
+
+    <!-- TAB 2: ALL HABITS VIEW -->
+    <section class="view-section" id="view-habits">
+      <div class="section-subhead">
+        <h2 class="section-title">Your Routines</h2>
+        <button class="btn-secondary" onclick="UI.openHabitModal()">+ New Habit</button>
+      </div>
+      <div class="habits-list" id="allHabitsList"></div>
+    </section>
+
+    <!-- TAB 3: PROGRESS VIEW -->
+    <section class="view-section" id="view-progress">
+      <div class="section-subhead">
+        <h2 class="section-title">Weekly Reflection</h2>
+      </div>
+      <div id="progressStatsContainer"></div>
+
+      <div class="section-subhead" style="margin-top: 24px;">
+        <h2 class="section-title">Habit History</h2>
+      </div>
+      <div class="habits-list" id="progressHabitsHistory"></div>
+    </section>
+
+    <!-- TAB 4: INSTALL & APK VIEW -->
+    <section class="view-section" id="view-install">
+      <div class="section-subhead">
+        <h2 class="section-title">Install & Android App</h2>
+      </div>
+
+      <!-- Live QR Code Card -->
+      <div class="install-card">
+        <h3 style="font-size: 1.1rem; margin-bottom: 6px;">Open on your phone</h3>
+        <p style="font-size: 0.85rem; color: var(--text-forest-muted);">Scan this QR code with your mobile camera to open this app directly:</p>
+        
+        <div class="qr-container">
+          <div class="qr-box" id="qrCodeContainer"></div>
+          <div class="qr-url-text" id="qrUrlDisplay"></div>
+        </div>
+        
+        <p style="font-size: 0.75rem; color: var(--text-forest-faint); text-align: center;">
+          Runs instantly with zero login required. All data stays privately on your device.
+        </p>
+      </div>
+
+      <!-- PWA Installation Guide -->
+      <div class="install-card">
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+          <span class="badge-tag">Fastest</span>
+          <h3 style="font-size: 1.05rem;">Install as Web App (PWA)</h3>
+        </div>
+        <p style="font-size: 0.85rem; color: var(--text-forest-muted);">
+          No app store download needed. Install straight from your mobile browser:
+        </p>
+        <ol class="step-list">
+          <li>Open this site in Chrome (Android) or Safari (iOS).</li>
+          <li>Tap the browser menu <strong>(⋮)</strong> or Share button.</li>
+          <li>Select <strong>"Add to Home screen"</strong> or <strong>"Install app"</strong>.</li>
+        </ol>
+      </div>
+
+      <!-- Android APK Guide -->
+      <div class="install-card">
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+          <span class="badge-tag" style="background:#EFEBF4; color:#5E537B;">Native APK</span>
+          <h3 style="font-size: 1.05rem;">Android Debug APK</h3>
+        </div>
+        <p style="font-size: 0.85rem; color: var(--text-forest-muted);">
+          Built with Capacitor and automated via GitHub Actions:
+        </p>
+        <ol class="step-list">
+          <li>Push changes to your repository's default branch.</li>
+          <li>Go to the <strong>Actions</strong> tab in your repository.</li>
+          <li>Select the <strong>Build Android APK</strong> workflow run.</li>
+          <li>Download the <code>app-debug.apk</code> artifact and install it on Android.</li>
+        </ol>
+        <div style="margin-top: 14px;">
+          <a href="./install.html" class="btn-secondary" style="width: 100%; text-decoration: none; justify-content: center;">
+            Open Dedicated Download Page →
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Bottom Navigation -->
+  <nav class="bottom-nav">
+    <button class="nav-item active" data-tab="today" aria-label="Today">
+      <svg viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="9"></circle>
+        <polyline points="12 6 12 12 16 14"></polyline>
+      </svg>
+      <span>Today</span>
+    </button>
+    <button class="nav-item" data-tab="habits" aria-label="Habits">
+      <svg viewBox="0 0 24 24">
+        <path d="M9 11l3 3L22 4"></path>
+        <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+      </svg>
+      <span>Habits</span>
+    </button>
+    <button class="nav-item" data-tab="progress" aria-label="Progress">
+      <svg viewBox="0 0 24 24">
+        <line x1="18" y1="20" x2="18" y2="10"></line>
+        <line x1="12" y1="20" x2="12" y2="4"></line>
+        <line x1="6" y1="20" x2="6" y2="14"></line>
+      </svg>
+      <span>Progress</span>
+    </button>
+    <button class="nav-item" data-tab="install" aria-label="Install App">
+      <svg viewBox="0 0 24 24">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+        <polyline points="7 10 12 15 17 10"></polyline>
+        <line x1="12" y1="15" x2="12" y2="3"></line>
+      </svg>
+      <span>Install</span>
+    </button>
+  </nav>
+
+  <!-- Modal Bottom Sheet: Create & Edit Habit -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal-sheet" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="sheet-handle"></div>
+      <div class="sheet-header">
+        <h2 class="sheet-title" id="modalTitle">New Habit</h2>
+        <button class="btn-icon-soft" id="btnCloseModal" aria-label="Close modal">✕</button>
+      </div>
+
+      <form id="habitForm">
+        <!-- Habit Name -->
+        <div class="form-group">
+          <label class="form-label" for="habitName">Habit Name</label>
+          <input type="text" id="habitName" class="form-input" placeholder="e.g. Read 5 pages, Drink water" required>
+        </div>
+
+        <!-- Optional Description -->
+        <div class="form-group">
+          <label class="form-label" for="habitDescription">Gentle Intention <span style="font-weight: 400; color: var(--text-forest-muted);">(optional)</span></label>
+          <input type="text" id="habitDescription" class="form-input" placeholder="e.g. A quiet moment before bed">
+        </div>
+
+        <!-- Emoji Selector -->
+        <div class="form-group">
+          <label class="form-label">Icon</label>
+          <div class="emoji-picker-row">
+            <button type="button" class="emoji-choice-btn selected" data-emoji="🌿">🌿</button>
+            <button type="button" class="emoji-choice-btn" data-emoji="💧">💧</button>
+            <button type="button" class="emoji-choice-btn" data-emoji="📖">📖</button>
+            <button type="button" class="emoji-choice-btn" data-emoji="🧘">🧘</button>
+            <button type="button" class="emoji-choice-btn" data-emoji="🚶">🚶</button>
+            <button type="button" class="emoji-choice-btn" data-emoji="☕">☕</button>
+            <button type="button" class="emoji-choice-btn" data-emoji="✍️">✍️</button>
+            <button type="button" class="emoji-choice-btn" data-emoji="🍎">🍎</button>
+            <button type="button" class="emoji-choice-btn" data-emoji="💤">💤</button>
+            <button type="button" class="emoji-choice-btn" data-emoji="🪴">🪴</button>
+            <button type="button" class="emoji-choice-btn" data-emoji="🌸">🌸</button>
+          </div>
+          <input type="text" id="customEmojiInput" class="form-input" style="height: 38px; font-size: 0.82rem;" placeholder="Or type any emoji here...">
+        </div>
+
+        <!-- Frequency -->
+        <div class="form-group">
+          <label class="form-label">Frequency</label>
+          <div class="segmented-control">
+            <button type="button" class="segment-btn active" id="segEveryday">Every Day</button>
+            <button type="button" class="segment-btn" id="segCustom">Selected Days</button>
+          </div>
+
+          <div id="customDaysContainer" style="display: none;">
+            <div class="day-chips">
+              <button type="button" class="day-chip active" data-day="1">M</button>
+              <button type="button" class="day-chip active" data-day="2">T</button>
+              <button type="button" class="day-chip active" data-day="3">W</button>
+              <button type="button" class="day-chip active" data-day="4">T</button>
+              <button type="button" class="day-chip active" data-day="5">F</button>
+              <button type="button" class="day-chip" data-day="6">S</button>
+              <button type="button" class="day-chip" data-day="0">S</button>
+            </div>
+            <div class="form-hint">Selected: Mon, Tue, Wed, Thu, Fri</div>
+          </div>
+        </div>
+
+        <!-- Reminder Setting -->
+        <div class="form-group">
+          <label class="form-label" for="habitReminderTime">Gentle Reminder <span style="font-weight: 400; color: var(--text-forest-muted);">(optional)</span></label>
+          <div style="display: flex; gap: 10px; align-items: center;">
+            <input type="time" id="habitReminderTime" class="form-input" style="flex: 1;">
+            <label style="display: flex; align-items: center; gap: 6px; font-size: 0.85rem; cursor: pointer;">
+              <input type="checkbox" id="habitReminderEnabled" style="accent-color: var(--accent-sage);">
+              <span>Notify</span>
+            </label>
+          </div>
+          <div class="form-hint">
+            Notifies you gently at this time on scheduled days.
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="modal-actions">
+          <button type="button" class="btn-danger-soft" id="btnDeleteHabit" style="display: none; margin-right: auto;">Delete</button>
+          <button type="button" class="btn-secondary" id="btnPauseHabit" style="display: none;">Pause</button>
+          <button type="submit" class="btn-primary">Save Routine</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="./assets/qr.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>

@@ -1,0 +1,29 @@
+{
+  "name": "little-by-little",
+  "version": "1.0.0",
+  "description": "A calm, forgiving habit tracker for daily routines",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx serve .",
+    "build": "node -e \"console.log('Static web app ready')\"",
+    "cap:sync": "cap sync",
+    "cap:android": "cap open android"
+  },
+  "keywords": [
+    "habit-tracker",
+    "wellness",
+    "pwa",
+    "capacitor",
+    "mobile-first"
+  ],
+  "author": "Little by Little",
+  "license": "MIT",
+  "dependencies": {
+    "@capacitor/android": "^6.0.0",
+    "@capacitor/core": "^6.0.0",
+    "@capacitor/local-notifications": "^6.0.0"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^6.0.0"
+  }
+}
