@@ -1005,7 +1005,9 @@ const UI = {
 
     // Use current URL origin + path, stripped of hash and index.html
     let currentUrl = window.location.href.split('#')[0];
-    if (currentUrl.endsWith('index.html')) {
+    if (window.location.protocol.startsWith('file:') || currentUrl.includes('localhost') || currentUrl.includes('127.0.0.1')) {
+      currentUrl = 'https://brewbloom02-art.github.io/little-by-little-habit-tracker/install.html';
+    } else if (currentUrl.endsWith('index.html')) {
       currentUrl = currentUrl.replace('index.html', 'install.html');
     } else if (!currentUrl.endsWith('install.html')) {
       currentUrl = currentUrl.replace(/\/?$/, '/install.html');

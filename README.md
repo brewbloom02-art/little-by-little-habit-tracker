@@ -65,20 +65,17 @@ Because Little by Little is built with modern, zero-dependency web standards:
 
 The repository is pre-configured with `.github/workflows/deploy-pages.yml` and relative path routing (`./styles.css`, `#today`, etc.):
 
-1. Create a repository on GitHub (e.g., `little-by-little`).
+1. Repository URL:
+   `https://github.com/brewbloom02-art/little-by-little-habit-tracker.git`
 2. Push this project to the `main` branch:
    ```bash
-   git init
-   git add .
-   git commit -m "Initial commit of Little by Little MVP"
-   git branch -M main
-   git remote add origin https://github.com/<your-username>/little-by-little.git
+   git remote add origin https://github.com/brewbloom02-art/little-by-little-habit-tracker.git
    git push -u origin main
    ```
 3. In GitHub, navigate to **Settings** → **Pages**:
    - Under **Build and deployment** > **Source**, choose **GitHub Actions**.
 4. The workflow will automatically run and publish your site at:
-   `https://<your-username>.github.io/little-by-little/`
+   `https://brewbloom02-art.github.io/little-by-little-habit-tracker/`
 
 ---
 
