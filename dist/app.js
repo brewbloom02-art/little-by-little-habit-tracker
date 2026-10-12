@@ -672,6 +672,7 @@ const UI = {
     this.renderTodayView();
     this.renderHabitsView();
     this.renderProgressView();
+    this.renderInstallTab();
   },
 
   renderDemoBanner() {

@@ -1013,6 +1013,14 @@ body {
   justify-content: center;
 }
 
+.qr-box svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 14px;
+  box-shadow: 0 4px 14px rgba(28, 56, 47, 0.08);
+}
+
 .qr-url-text {
   font-size: 0.78rem;
   color: var(--text-forest-muted);
